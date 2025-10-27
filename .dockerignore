@@ -1,0 +1,11 @@
+.venv
+.streamlit/
+.data/
+*.db
+__pycache__/
+.cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.env.example
+.pre-commit-config.yaml

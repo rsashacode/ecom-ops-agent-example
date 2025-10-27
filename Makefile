@@ -29,7 +29,7 @@ index:
 	$(python) python pipelines/build_index.py
 
 up:
-	docker compose -f infra/docker-compose.yml up -d
+	docker compose --env-file .env -f infra/docker-compose.yml up -d --build
 
 down:
-	docker compose -f infra/docker-compose.yml down
+	docker compose --env-file .env -f infra/docker-compose.yml down --rmi all

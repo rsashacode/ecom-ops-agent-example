@@ -2,8 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# For healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
 COPY pyproject.toml uv.lock* ./
 RUN pip install --no-cache-dir uv && uv sync --frozen --no-dev
+RUN uv venv
 COPY . .
 
 EXPOSE 8000
