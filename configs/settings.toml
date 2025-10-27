@@ -1,0 +1,7 @@
+[app]
+env = "dev"
+api_port = 8000
+ui_port = 8501
+
+[models]
+provider = "openai" # "vllm"
