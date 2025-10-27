@@ -1,6 +1,5 @@
 .venv
-.streamlit/
-.data/
+/data/*
 *.db
 __pycache__/
 .cache

@@ -5,6 +5,6 @@ env = "dev"
 provider = "openai" # "vllm"
 
 [data]
-slug = "olistbr/brazilian-ecommerce"
+kaggle_slug = "olistbr/brazilian-ecommerce"
 raw_dir = "data/raw"
 processed_dir = "data/processed"
