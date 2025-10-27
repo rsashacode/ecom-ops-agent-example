@@ -9,3 +9,4 @@ __pycache__/
 .ruff_cache/
 .env.example
 .pre-commit-config.yaml
+.vscode/

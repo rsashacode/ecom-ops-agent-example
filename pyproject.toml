@@ -5,10 +5,18 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "duckdb==1.1.1",
     "fastapi>=0.120.0",
+    "kagglehub>=0.3.13",
+    "pandas>=2.3.3",
+    "prefect>=3.4.25",
+    "psycopg>=3.2.12",
+    "pyarrow>=22.0.0",
     "pydantic>=2.12.3",
     "python-dotenv>=1.2.1",
+    "sqlalchemy>=2.0.44",
     "streamlit>=1.50.0",
+    "tqdm>=4.67.1",
     "uvicorn>=0.38.0",
 ]
 
@@ -34,7 +42,7 @@ line-length = 100
 [tool.ruff]
 line-length = 100
 lint.select = ["E","F","I","B","UP"]
-lint.ignore = ["E501"]
+lint.ignore = ["E501", "F401"]
 
 [tool.mypy]
 python_version = "3.11"
