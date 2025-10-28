@@ -11,6 +11,8 @@ make test
 
 - `make api` serves FastAPI on `:8000` and `/health` returns `ok`
 - `make ui` opens Streamlit, posts to `/v1/chat`, and displays the echo
-- `uv run pytest` for tests
-- `pre-commit` is installed and fixes style on commit
-- `docker compose up` builds and runs the API + UI containers
+- `make test` or `uv run pytest` for tests
+- `make fmt` run black and ruff checks with fix
+- `make lint` ruff and mypy checks
+- `make up` or `docker compose up` builds and runs containers
+- `make down` or `docker compose down` stops containers
