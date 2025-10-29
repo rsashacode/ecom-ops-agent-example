@@ -6,6 +6,8 @@ import duckdb
 import pandas as pd
 from dotenv import load_dotenv
 from prefect import flow, get_run_logger, task
+from prefect.futures import wait
+from prefect.task_runners import ThreadPoolTaskRunner
 from sqlalchemy import create_engine, text
 
 from pipelines._manifest import FILES
@@ -30,7 +32,7 @@ def read_csv(path: str, table: str) -> pd.DataFrame:
     return df
 
 
-@task
+@task(retries=2)
 def t_download() -> dict[str, str]:
     logger = get_run_logger()
     logger.info("Downloading raw files ...")
@@ -47,17 +49,15 @@ def t_duckdb_load(files: dict[str, str]) -> str:
     duck_path.parent.mkdir(parents=True, exist_ok=True)
 
     con = duckdb.connect(str(duck_path))
-    for filename, table in FILES:
-        logger.info("Loading %s into DuckDB table %s", filename, table)
-        df = read_csv(files[filename], table)
-
-        con.execute(f"CREATE TABLE IF NOT EXISTS {table} AS SELECT * FROM df LIMIT 0;")
-        con.register("df", df)
-
-        con.execute(f"CREATE OR REPLACE TABLE {table} AS SELECT * FROM df;")
-        con.unregister("df")
-
-    con.close()
+    try:
+        for filename, table in FILES:
+            logger.info("Loading %s into DuckDB table %s", filename, table)
+            df = read_csv(files[filename], table)
+            con.register("df", df)
+            con.execute(f"CREATE OR REPLACE TABLE {table} AS SELECT * FROM df;")
+            con.unregister("df")
+    finally:
+        con.close()
     logger.info("DuckDB file at %s", duck_path)
     return str(duck_path)
 
@@ -85,12 +85,17 @@ def t_postgres_load(files: dict[str, str]) -> str:
     return db_url
 
 
-@flow(name="Ingest Olist into DuckDB and Postgres")
+@flow(name="Ingest Olist into DuckDB and Postgres", task_runner=ThreadPoolTaskRunner(max_workers=2))
 def ingest_flow():
-    files = t_download()
-    duckdb_path = t_duckdb_load(files)
-    pg_url = t_postgres_load(files)
-    return {"duckdb": duckdb_path, "postgres": pg_url}
+    files_fut = t_download.submit()
+    duck_fut = t_duckdb_load.submit(files_fut)
+    pg_fut = t_postgres_load.submit(files_fut)
+    wait([duck_fut, pg_fut])
+
+    duckdb_path = duck_fut.result()
+    pg_url = pg_fut.result()
+
+    print({"duckdb": duckdb_path, "postgres": pg_url})
 
 
 if __name__ == "__main__":
