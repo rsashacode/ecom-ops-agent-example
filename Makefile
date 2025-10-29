@@ -20,7 +20,7 @@ lint:
 	$(python) mypy apps agent pipelines
 
 data:
-	@echo "placeholder: will download data later"
+	$(python) -m pipelines.download_data
 
 ingest:
 	$(python) python pipelines/ingest.py
@@ -33,9 +33,3 @@ up:
 
 down:
 	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml down
-
-db-up:
-	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml up -d postgres adminer
-
-db-down:
-	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml down postgres adminer
