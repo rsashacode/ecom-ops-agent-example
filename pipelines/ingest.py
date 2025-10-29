@@ -85,11 +85,11 @@ def t_postgres_load(files: dict[str, str]) -> str:
     return db_url
 
 
-@flow(name="Ingest Olist into DuckDB and Postgres", task_runner=ThreadPoolTaskRunner(max_workers=2))
+@flow(name="Ingest data into DuckDB and Postgres", task_runner=ThreadPoolTaskRunner(max_workers=2))  # type: ignore
 def ingest_flow():
     files_fut = t_download.submit()
-    duck_fut = t_duckdb_load.submit(files_fut)
-    pg_fut = t_postgres_load.submit(files_fut)
+    duck_fut = t_duckdb_load.submit(files_fut)  # type: ignore[arg-type]
+    pg_fut = t_postgres_load.submit(files_fut)  # type: ignore[arg-type]
     wait([duck_fut, pg_fut])
 
     duckdb_path = duck_fut.result()
