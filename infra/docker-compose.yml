@@ -23,7 +23,7 @@ services:
       api:
         condition: service_healthy
 
-  postgres:
+  postgres-docker:
     image: postgres:16
     restart: unless-stopped
     environment:
@@ -45,7 +45,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      postgres:
+      postgres-docker:
         condition: service_healthy
 
 

@@ -23,13 +23,13 @@ data:
 	$(python) -m pipelines.download_data
 
 ingest:
-	$(python) python pipelines/ingest.py
+	$(python) -m pipelines.ingest
 
 index:
-	$(python) python pipelines/build_index.py
+	$(python) -m pipelines.build_index
 
 up:
-	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml up -d
+	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml up -d
 
 down:
-	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml down
+	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml down

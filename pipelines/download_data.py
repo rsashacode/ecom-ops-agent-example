@@ -23,7 +23,7 @@ def download(slug: str, raw_dir: Path) -> dict[str, str]:
     saved_path = kagglehub.dataset_download("olistbr/brazilian-ecommerce")
 
     saved_set = set([fn for fn in os.listdir(saved_path)])
-    manifest_set = set(FILES.keys())
+    manifest_set = set([f[0] for f in FILES])
     if not saved_set == manifest_set:
         raise RuntimeError(
             f"Download is not successful. {saved_set}!={manifest_set}. Check manifest"
@@ -37,7 +37,7 @@ def download(slug: str, raw_dir: Path) -> dict[str, str]:
     to_del = Path(*Path(saved_path).relative_to(abs_path).parts[:1])
     shutil.rmtree(Path.joinpath(Path(abs_path), to_del))
 
-    saved = {fn: str(raw_dir / fn) for fn in FILES.keys()}
+    saved = {f[0]: str(raw_dir / f[0]) for f in FILES}
     return saved
 
 
