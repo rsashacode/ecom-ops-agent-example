@@ -10,7 +10,7 @@ services:
       test: ["CMD-SHELL", "curl -fsS http://${API_HOST}:${API_PORT}/health || exit 1"]
       interval: 5s
       timeout: 3s
-      retries: 30
+      retries: 10
 
   ui:
     build:
