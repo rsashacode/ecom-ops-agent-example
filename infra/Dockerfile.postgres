@@ -1,0 +1,5 @@
+FROM postgres:16
+
+COPY infra/init-db-scripts/run-ro-wrapper.sh    /docker-entrypoint-initdb.d/run-ro-wrapper.sh
+
+RUN chmod +x /docker-entrypoint-initdb.d/run-ro-wrapper.sh

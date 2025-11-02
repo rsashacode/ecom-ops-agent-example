@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# OS deps (psycopg2, curl for healthchecks)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    curl \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml uv.lock* ./
+RUN pip install --no-cache-dir uv && uv sync --frozen --no-dev
+
+COPY . .

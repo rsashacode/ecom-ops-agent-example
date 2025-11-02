@@ -29,7 +29,10 @@ index:
 	$(python) -m pipelines.build_index
 
 up:
-	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml up -d
+	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml up -d --build
 
 down:
 	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml down
+
+cleanup:
+	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml down -v
