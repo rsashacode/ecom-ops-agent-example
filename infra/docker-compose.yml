@@ -21,6 +21,9 @@ services:
     ports:
       - "${UI_PORT:-8501}:${UI_PORT:-8501}"
     env_file: ../.env
+    environment:
+      API_HOST: api
+      DB_HOST: postgres-docker
     depends_on:
       api:
         condition: service_healthy
@@ -30,12 +33,7 @@ services:
       context: ..
       dockerfile: infra/Dockerfile.postgres
     restart: unless-stopped
-    environment:
-      PGUSER: ${PGUSER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-postgres}
-      PGUSER_RO: ${PGUSER_RO:?}
-      PGUSER_RO_PASSWORD: ${PGUSER_RO_PASSWORD:?}
+    env_file: ../.env
     ports:
       - "5432:5432"
     volumes:

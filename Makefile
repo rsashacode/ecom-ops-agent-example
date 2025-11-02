@@ -28,11 +28,14 @@ ingest:
 index:
 	$(python) -m pipelines.build_index
 
+db-up:
+	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml up postgres-docker adminer -d --build
+
 up:
-	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml up -d --build
+	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml up -d --build
 
 down:
-	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml down
+	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml down
 
 cleanup:
-	docker compose -p "ecom-ops" --env-file .env.docker -f infra/docker-compose.yml down -v
+	docker compose -p "ecom-ops" --env-file .env -f infra/docker-compose.yml down -v
